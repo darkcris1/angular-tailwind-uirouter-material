@@ -1,0 +1,126 @@
+<div class="container">
+  <form
+    (ngSubmit)="handleSubmit(Form.form)"
+    class="md:mx-auto m-2 md:w-1/2 flex flex-col"
+    [formGroup]="Form.form"
+  >
+    <mat-form-field [appearance]="inputAppearance">
+      <mat-label>Username</mat-label>
+      <input
+        formControlName="username"
+        type="text"
+        matInput
+        class="outline-none"
+      />
+      <mat-error *ngIf="Form.getError('username') as error">{{
+        error
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field [appearance]="inputAppearance">
+      <mat-label>Email</mat-label>
+      <input
+        formControlName="email"
+        type="email"
+        matInput
+        class="outline-none"
+      />
+      <mat-error *ngIf="Form.getError('email') as error">{{ error }}</mat-error>
+    </mat-form-field>
+    <mat-form-field [appearance]="inputAppearance">
+      <mat-label>Password</mat-label>
+      <input
+        formControlName="password"
+        type="password"
+        matInput
+        class="outline-none"
+      />
+      <mat-error *ngIf="Form.getError('password') as error">{{
+        error
+      }}</mat-error>
+    </mat-form-field>
+    <mat-form-field [appearance]="inputAppearance">
+      <mat-label>Confirm Password</mat-label>
+      <input
+        formControlName="confirm_password"
+        type="password"
+        matInput
+        class="outline-none"
+      />
+      <mat-error *ngIf="Form.getError('confirm_password') as error">{{
+        error
+      }}</mat-error>
+    </mat-form-field>
+    <div formArrayName="phones" class="flex flex-col my-2">
+      <div
+        class="flex items-center"
+        *ngFor="let phone of phones.controls; let i = index"
+      >
+        <mat-form-field [appearance]="inputAppearance" class="w-full">
+          <mat-label>PhoneNumber</mat-label>
+          <input formControlName="{{ i }}" matInput class="outline-none" />
+          <mat-error *ngIf="Form.getError('phones.' + i) as error">{{
+            error
+          }}</mat-error>
+        </mat-form-field>
+        <button (click)="Form.removePhones(i)" mat-icon-button color="danger">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <button
+        mat-raised-button
+        type="button"
+        (click)="Form.addPhones()"
+        color="primary"
+        class="m-2"
+      >
+        <mat-icon>add</mat-icon> Add Phone Number
+      </button>
+    </div>
+    <div formArrayName="experience" class="flex flex-col my-2">
+      <div
+        *ngFor="let experience of Form.experience.controls; let i = index"
+        [formGroupName]="i"
+        class="flex justify-between center items-center my-2"
+      >
+        <mat-form-field class="w-full mx-2" [appearance]="inputAppearance">
+          <mat-label>Job Name</mat-label>
+          <input formControlName="name" matInput class="outline-none" />
+          <mat-error
+            *ngIf="Form.getError('experience.' + i + '.name') as error"
+            >{{ error }}</mat-error
+          >
+        </mat-form-field>
+        <mat-form-field class="w-full mx-2" [appearance]="inputAppearance">
+          <mat-label>Years</mat-label>
+          <input formControlName="years" matInput class="outline-none" />
+          <mat-error
+            *ngIf="Form.getError('experience.' + i + '.years') as error"
+            >{{ error }}</mat-error
+          >
+        </mat-form-field>
+        <button
+          mat-icon-button
+          color="error"
+          (click)="Form.removeExperience(i)"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <button
+        mat-raised-button
+        type="button"
+        (click)="Form.addExperience()"
+        color="primary"
+        class="m-2"
+      >
+        <mat-icon>add</mat-icon> Add Experience
+      </button>
+    </div>
+
+    <button [disabled]="!Form.form.valid" mat-raised-button color="primary">
+      Register
+    </button>
+  </form>
+</div>

@@ -1,0 +1,16 @@
+<p>favorite works asdas d asd asd!</p>
+<div class="flex">
+  <ul class="mr-2">
+    <li *ngFor="let _ of items; let i = index">
+      <a
+        uiSref="/newsfeed/favorites/:id"
+        [uiParams]="{ id: i }"
+        mat-button
+        uiSrefActive="mat-accent"
+        (click)="changeName()"
+        >Favorite ID -> {{ i }}</a
+      >
+    </li>
+  </ul>
+  <ui-view></ui-view>
+</div>

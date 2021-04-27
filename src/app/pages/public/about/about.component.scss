@@ -1,0 +1,9 @@
+@import "mixin";
+
+h1 {
+  background: yellow;
+
+  @include mq("md") {
+    background: green;
+  }
+}

@@ -1,0 +1,51 @@
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+*:focus {
+  outline: none !important;
+}
+#arrow,
+#arrow::before {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  z-index: 0;
+  background: inherit;
+}
+
+#arrow {
+  visibility: hidden;
+}
+
+#arrow::before {
+  visibility: visible;
+  content: "";
+  transform: rotate(45deg);
+}
+
+[data-popper-placement^="top"] > #arrow {
+  bottom: -4px;
+}
+
+[data-popper-placement^="bottom"] > #arrow {
+  top: -4px;
+}
+
+[data-popper-placement^="left"] > #arrow {
+  right: -4px;
+}
+
+[data-popper-placement^="right"] > #arrow {
+  left: -4px;
+}
+
+.tippy-box[data-theme~="compact"] {
+  background-color: transparent;
+  .tippy-arrow {
+    color: #cccccc;
+  }
+  .tippy-content {
+    padding: 0;
+  }
+}

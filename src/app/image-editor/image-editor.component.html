@@ -1,0 +1,179 @@
+<input
+  hidden
+  #photo
+  type="file"
+  accept="image/*"
+  (change)="handleChange($event)"
+/>
+<input
+  hidden
+  #inserImage
+  type="file"
+  accept="image/*"
+  (change)="handleInsertImage($event)"
+/>
+<h1>Image editor</h1>
+<div class="editor-container">
+  <div *ngIf="isLoading" class="modal">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div class="menu-toolbar flex my-2">
+    <button
+      matTooltip="Filter"
+      [matMenuTriggerFor]="filterMenu"
+      mat-icon-button
+    >
+      <mat-icon>photo_filter</mat-icon>
+    </button>
+    <button
+      (click)="dispatcher('drawing-mode', { mode: 'SHAPE' })"
+      matTooltip="Add Shapes and Icons"
+      [matMenuTriggerFor]="shapeMenu"
+      mat-icon-button
+    >
+      <mat-icon>add_circle_outline</mat-icon>
+    </button>
+    <button
+      (click)="dispatcher('drawing-mode', { mode: 'FREE_DRAWING' })"
+      matTooltip="Brush"
+      [matMenuTriggerFor]="brushOption"
+      mat-icon-button
+    >
+      <mat-icon>edit_outline</mat-icon>
+    </button>
+    <button
+      matTooltip="Add Text"
+      [matMenuTriggerFor]="fontMenu"
+      mat-icon-button
+    >
+      <mat-icon>text_fields</mat-icon>
+    </button>
+    <button
+      matTooltip="Select Mode"
+      (click)="dispatcher('select-mode')"
+      mat-icon-button
+    >
+      <mat-icon>navigation</mat-icon>
+    </button>
+    <div class="flex-grow-1"></div>
+
+    <button
+      matTooltip="Save"
+      (click)="dispatcher('save-image')"
+      mat-icon-button
+    >
+      <mat-icon>save</mat-icon>
+    </button>
+    <div class="flex-grow-1"></div>
+
+    <button matTooltip="Undo" (click)="dispatcher('undo')" mat-icon-button>
+      <mat-icon>undo</mat-icon>
+    </button>
+
+    <button matTooltip="Redo" (click)="dispatcher('redo')" mat-icon-button>
+      <mat-icon>redo</mat-icon>
+    </button>
+    <button
+      matTooltip="Delete Selected Object"
+      (click)="deleteActiveObject()"
+      mat-icon-button
+    >
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+  <div id="image-editor" #editorContainer></div>
+</div>
+
+<mat-menu #filterMenu xPosition="after">
+  <label
+    (click)="
+      $event.stopPropagation(); dispatcher('filter', { filterName: filterName })
+    "
+    *ngFor="let filterName of filterNameList"
+    mat-menu-item
+  >
+    <mat-checkbox>{{ filterName }}</mat-checkbox>
+  </label>
+</mat-menu>
+
+<mat-menu #shapeMenu xPosition="after">
+  <button (click)="$event.stopPropagation()" mat-menu-item>
+    <div
+      class="color-pick"
+      [(colorPicker)]="iconColor"
+      (colorPickerChange)="handleShape()"
+    >
+      <mat-icon [style.color]="iconColor">color_lens</mat-icon>
+    </div>
+  </button>
+  <button
+    *ngFor="let shapeName of shapeList"
+    mat-menu-item
+    (click)="shape = shapeName; handleShape()"
+  >
+    {{ shapeName }}
+  </button>
+
+  <button mat-menu-item [matMenuTriggerFor]="icons">Icons</button>
+  <button mat-menu-item (click)="inserImage.click()">Image</button>
+</mat-menu>
+
+<mat-menu #icons xPosition="after">
+  <button
+    *ngFor="let iconName of iconsList"
+    mat-menu-item
+    (click)="dispatcher('add-icon', { icon: iconName })"
+  >
+    {{ iconName }}
+  </button>
+</mat-menu>
+
+<mat-menu #brushOption xPosition="after">
+  <button (click)="$event.stopPropagation()" mat-menu-item>
+    <div
+      class="color-pick"
+      [(colorPicker)]="brushColor"
+      (colorPickerChange)="handleBrush()"
+    >
+      <mat-icon [style.color]="brushColor">color_lens</mat-icon>
+    </div>
+  </button>
+  <button
+    (click)="dispatcher('drawing-mode', { mode: 'FREE_DRAWING' })"
+    mat-menu-item
+  >
+    FREE MODE
+  </button>
+  <button
+    (click)="dispatcher('drawing-mode', { mode: 'LINE_DRAWING' })"
+    mat-menu-item
+  >
+    LINE
+  </button>
+  <div (click)="$event.stopPropagation()" matTooltip="Brush Width">
+    <mat-slider
+      [(ngModel)]="brushWidth"
+      [value]="brushWidth.toString()"
+      (ngModelChange)="handleBrush()"
+      min="10"
+      max="50"
+      class="m-2"
+    ></mat-slider>
+  </div>
+</mat-menu>
+
+<mat-menu #fontMenu xPosition="after">
+  <button (click)="$event.stopPropagation()" mat-menu-item>
+    <div class="color-pick" [(colorPicker)]="textColor">
+      <mat-icon [style.color]="textColor">color_lens</mat-icon>
+    </div>
+  </button>
+  <div mat-menu-item>
+    <mat-form-field (click)="$event.stopPropagation()">
+      <mat-label>Text</mat-label>
+      <input autocomplete="off" [(ngModel)]="textValue" type="text" matInput />
+    </mat-form-field>
+  </div>
+
+  <button (click)="dispatcher('add-text')" mat-menu-item>Add Text</button>
+</mat-menu>

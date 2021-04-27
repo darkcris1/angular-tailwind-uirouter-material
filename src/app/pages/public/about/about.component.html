@@ -1,0 +1,91 @@
+<section>
+  <div class="container">
+    <input type="file" accept="image/*" (change)="handleChange($event)" />
+    <ng-container #imageEditor></ng-container>
+    <button #target class="mat-raised-button">Double Menu</button>
+    <div app-popper class="bg-gray-400" [parent]="target" [placement]="'left'">
+      <div id="arrow"></div>
+      <div class="flex flex-col">
+        <button mat-button>Hello world</button>
+        <button mat-button>Hello world</button>
+        <button mat-button>Hello world</button>
+      </div>
+    </div>
+    <div
+      class="bg-gray-200 rounded-md"
+      app-popper
+      [parent]="target"
+      [placement]="'bottom'"
+    >
+      <div id="arrow"></div>
+
+      <div class="flex flex-col">
+        <button mat-button>Hello world</button>
+        <button mat-button>Hello world</button>
+        <button mat-button>Hello world</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<button
+  [ngxTippy]="tippyTemplate"
+  tippyName="content"
+  [tippyProps]="{
+    interactive: true,
+    theme: 'compact',
+    placement: 'right',
+    trigger: 'click'
+  }"
+  mat-button
+>
+  Element with tooltip
+</button>
+<div #tippyTemplate>
+  <color-github triangle="hide"></color-github>
+</div>
+
+<button
+  [ngxTippy]="selectedMenu || userMenu"
+  [tippyProps]="{
+    interactive: true,
+    theme: 'material',
+    placement: 'bottom',
+    trigger: 'click'
+  }"
+  mat-button
+>
+  Menu
+</button>
+<div #userMenu>
+  <div class="flex flex-col">
+    <button mat-button>
+      <mat-icon>add</mat-icon>
+      <span>Hello world</span>
+    </button>
+    <button mat-button>
+      <mat-icon>add</mat-icon>
+      <span>Hello world</span>
+    </button>
+    <button (click)="selectedMenu = language" mat-button>
+      <mat-icon>add</mat-icon>
+      <span>languages</span>
+    </button>
+  </div>
+</div>
+<div #language class="hidden">
+  <div class="flex flex-col">
+    <button mat-button>
+      <mat-icon>add</mat-icon>
+      <span>English</span>
+    </button>
+    <button mat-button>
+      <mat-icon>add</mat-icon>
+      <span>French</span>
+    </button>
+    <button mat-button>
+      <mat-icon>add</mat-icon>
+      <span>French</span>
+    </button>
+  </div>
+</div>
